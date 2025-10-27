@@ -136,7 +136,7 @@ body {
 
 .general-data-container {
     display: flex;
-    justify-content: center; /* центрируем всё */
+    justify-content: center; 
     align-items: center;
     gap: 50px;
     margin-bottom: 15px;
@@ -144,13 +144,13 @@ body {
 
 .bp-container {
     display: flex;
-    flex-direction: row; /* уровень и опыт в одну строку */
+    flex-direction: row; 
     align-items: center;
     justify-content: center;
     gap: 20px;
 }
 
-/* Past — горизонтальные блоки */
+
 .past-block {
     display: flex;
     gap: 5px;
@@ -171,7 +171,7 @@ body {
 
 
 
-/* Формы входа и регистрации */
+
 .form-container {
     max-width: 400px;
     margin: 50px auto;
