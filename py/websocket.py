@@ -1,4 +1,3 @@
-# stalcraft-users.ru/py/websocket.py
 from fastapi import WebSocket, WebSocketDisconnect
 from py.auth import load_user, save_user, sessions
 from py.utils import add_daily_record
@@ -27,7 +26,7 @@ def calculate_today_changes(user):
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
 
-    # cookie вместо токена
+    
     session_id = websocket.cookies.get("session_id")
     if not session_id or session_id not in sessions:
         await websocket.close(code=403)
