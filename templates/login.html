@@ -1,0 +1,19 @@
+<!-- stalcraft-users.ru/templates/login.html -->
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Вход</h1>
+    <form action="/login" method="post">
+        <label>Логин:</label>
+        <input type="text" name="login" required>
+
+        <label>Пароль:</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Войти</button>
+    </form>
+    <p>Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+</div>
+{% endblock %}

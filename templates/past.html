@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Прошлое{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="content">
+        <h2>История изменений</h2>
+        {% for diff in day_diffs %}
+        <div style="margin-bottom: 25px;">
+            <p><strong>{{ diff.date_curr }}</strong></p>
+
+            <div class="section-title">До</div>
+            <div class="past-block">
+                <div class="past-item">Деньги: {{ diff.money_prev }}</div>
+                <div class="past-item">BP: {{ diff.bp_level_prev }}</div>
+                <div class="past-item">Опыт: {{ diff.bp_exp_prev }}/1000</div>
+                {% for k, v in diff.north_prev.items() %}
+                    <div class="past-item">{{ k }}: {{ v }}</div>
+                {% endfor %}
+                {% for k, v in diff.lim_prev.items() %}
+                    <div class="past-item">{{ k }}: {{ v }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="section-title">Изменения</div>
+            <div class="past-block">
+                <div class="past-item">{% if diff.money != 0 %}{{ "+" if diff.money>0 else "" }}{{ diff.money }} ₽{% endif %}</div>
+                <div class="past-item">{% if diff.bp_level != 0 %}{{ "+" if diff.bp_level>0 else "" }}{{ diff.bp_level }}{% endif %}</div>
+                <div class="past-item">{% if diff.bp_exp != 0 %}{{ "+" if diff.bp_exp>0 else "" }}{{ diff.bp_exp }}{% endif %}</div>
+                {% for k, v in diff.north_prev.items() %}
+                    <div class="past-item">{% if diff.north.get(k) %}{{ "+" if diff.north[k]>0 else "" }}{{ diff.north[k] }}{% endif %}</div>
+                {% endfor %}
+                {% for k, v in diff.lim_prev.items() %}
+                    <div class="past-item">{% if diff.lim.get(k) %}{{ "+" if diff.lim[k]>0 else "" }}{{ diff.lim[k] }}{% endif %}</div>
+                {% endfor %}
+            </div>
+
+            <div class="section-title">После</div>
+            <div class="past-block">
+                <div class="past-item">Деньги: {{ diff.money_after }}</div>
+                <div class="past-item">BP: {{ diff.bp_level_after }}</div>
+                <div class="past-item">Опыт: {{ diff.bp_exp_after }}/1000</div>
+                {% for k, v in diff.north_after.items() %}
+                    <div class="past-item">{{ k }}: {{ v }}</div>
+                {% endfor %}
+                {% for k, v in diff.lim_after.items() %}
+                    <div class="past-item">{{ k }}: {{ v }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="sidebar">
+        <a href="/menu" class="menu-item">⬅ Назад</a>
+    </div>
+</div>
+{% endblock %}

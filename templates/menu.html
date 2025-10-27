@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+{% macro resource_img(name) %}
+    {% set mapping = {
+        "Остатки пси-маячка": "psi",
+        "Рыжий папоротник": "papor",
+        "Фрагмент данных \"Гамма\"": "gamma",
+        "Вещество 07270": "07270",
+        "Квантовая батарея": "quant",
+        "Аномальная сыворотка": "vorot",
+        "Лимбоплазма": "limbo",
+        "Горьколистник": "gorko",
+        "Лимб": "limb",
+        "Фрагмент данных \"Лямбда\"": "lamda",
+        "Аномальная батарея": "batarey"
+    } %}
+    <img src="/static/img/resources/{{ mapping[name] }}.webp" class="resource-icon">
+{% endmacro %}
+
+<div class="main-container">
+    <div class="content">
+        <h1>{{ user.nick }}</h1>
+        <div id="generalData" class="general-data-container">
+            <div class="bp-container">
+                <p>BP уровень: {{ user.bp_level }}</p>
+                <p>BP опыт: {{ user.bp_exp }}/1000</p>
+            </div>
+            <p>Деньги: {{ user.money }}</p>
+        </div>
+        <button id="editBtn">Изменить</button>
+
+        <h2>Север</h2>
+        <div class="resource-list" id="northList">
+            {% for name, value in user.north.items() %}
+            <div class="resource-item">
+                <div class="resource-image">
+                    {{ resource_img(name) }}
+                    <div class="image-count">{{ value }}x</div>
+                </div>
+                <div class="resource-name">{{ name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Лим</h2>
+        <div class="resource-list" id="limList">
+            {% for name, value in user.lim.items() %}
+            <div class="resource-item">
+                <div class="resource-image">
+                    {{ resource_img(name) }}
+                    <div class="image-count">{{ value }}x</div>
+                </div>
+                <div class="resource-name">{{ name }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="menu-item"><a href="/profile" style="color:inherit;text-decoration:none;">👤 Профиль</a></div>
+        <div class="menu-item">⚙ Меню</div>
+        <a href="/past" class="menu-item">📅 Прошлое</a>
+        <form action="/logout" method="get" style="margin:0;">
+            <button type="submit" class="menu-item">🚪 Выход</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const socket = new WebSocket(`ws://${location.host}/ws`);
+    const editBtn = document.getElementById("editBtn");
+    let editMode = false;
+
+    editBtn.addEventListener("click", () => {
+        if (!editMode) {
+            editMode = true;
+            editBtn.textContent = "Сохранить";
+            makeEditable();
+        } else {
+            saveChanges();
+            editMode = false;
+            editBtn.textContent = "Изменить";
+            makeView();
+        }
+    });
+
+    function makeEditable() {
+        document.getElementById("generalData").innerHTML = `
+            <div class="bp-container">
+                <label>BP уровень:</label>
+                <input type="number" id="bp_level" value="{{ user.bp_level }}">
+                <label>BP опыт:</label>
+                <input type="number" id="bp_exp" value="{{ user.bp_exp }}"> / 1000
+            </div>
+            <div>
+                <label>Деньги:</label>
+                <input type="number" id="money" value="{{ user.money }}">
+            </div>
+        `;
+        const northList = document.getElementById("northList");
+        northList.innerHTML = `{% for name, value in user.north.items() %}
+            <div class="resource-item">
+                <div class="resource-image">
+                    {{ resource_img(name) }}
+                    <div class="image-count">{{ value }}x</div>
+                </div>
+                <div class="resource-name">{{ name }}</div>
+                <input type="number" name="north_{{ name }}" value="{{ value }}">
+            </div>
+        {% endfor %}`;
+        const limList = document.getElementById("limList");
+        limList.innerHTML = `{% for name, value in user.lim.items() %}
+            <div class="resource-item">
+                <div class="resource-image">
+                    {{ resource_img(name) }}
+                    <div class="image-count">{{ value }}x</div>
+                </div>
+                <div class="resource-name">{{ name }}</div>
+                <input type="number" name="lim_{{ name }}" value="{{ value }}">
+            </div>
+        {% endfor %}`;
+    }
+
+    function makeView() {
+        location.reload();
+    }
+
+    function saveChanges() {
+        const data = {north:{}, lim:{}};
+        data.money = parseInt(document.getElementById("money").value);
+        data.bp_level = parseInt(document.getElementById("bp_level").value);
+        data.bp_exp = parseInt(document.getElementById("bp_exp").value);
+        document.querySelectorAll('input[name^="north_"]').forEach(input => {
+            data.north[input.name.replace("north_", "")] = parseInt(input.value);
+        });
+        document.querySelectorAll('input[name^="lim_"]').forEach(input => {
+            data.lim[input.name.replace("lim_", "")] = parseInt(input.value);
+        });
+        socket.send(JSON.stringify(data));
+    }
+</script>
+{% endblock %}
