@@ -13,7 +13,7 @@ USERS_DIR.mkdir(exist_ok=True)
 
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 router = APIRouter()
-sessions = {}  # session_id -> login
+sessions = {}  
 
 def load_user(login: str) -> User | None:
     user_file = USERS_DIR / f"{login}.json"
@@ -52,7 +52,7 @@ async def register(
 
     today_date = datetime.now().strftime("%d.%m.%y")
 
-    # Хэшируем пароль
+
     hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
     new_user = User(
@@ -96,27 +96,27 @@ async def login(response: Response, login: str = Form(...), password: str = Form
 
     stored_pw = user.password
 
-    # Проверка: bcrypt-хэш или обычный пароль
+
     is_hashed = stored_pw.startswith("$2b$") or stored_pw.startswith("$2a$")
 
     if is_hashed:
-        # Новый формат — сравниваем через bcrypt
+        
         if not bcrypt.checkpw(password.encode("utf-8"), stored_pw.encode("utf-8")):
             return {"error": "Неверный логин или пароль"}
     else:
-        # Старый формат — сравниваем напрямую
+        
         if password != stored_pw:
             return {"error": "Неверный логин или пароль"}
-        # Если пароль верный — хэшируем и сохраняем
+        
         hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
         user.password = hashed_pw
         save_user(user)
 
-    # Генерация новой сессии
+    
     session_id = secrets.token_hex(16)
     sessions[session_id] = login
 
-    # Запись cookie
+
     response = RedirectResponse(url="/menu", status_code=303)
     response.set_cookie(key="session_id", value=session_id, httponly=True)
     return response
