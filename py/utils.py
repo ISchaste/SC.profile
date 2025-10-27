@@ -1,17 +1,12 @@
-# stalcraft-users.ru/py/utils.py
 from datetime import datetime
 from py.models import User, DayRecord
 from typing import List, Dict
 
 
 def add_daily_record(user: User, force=False) -> User:
-    """
-    Добавляет новую запись состояния пользователя в days.
-    force=True -> добавляем даже если изменений нет (для первой записи).
-    """
     now_str = datetime.now().strftime("%d.%m.%y %H:%M")
 
-    # Если первая запись в истории
+    
     if not user.days and force:
         new_day = DayRecord(
             date=now_str,
@@ -24,11 +19,11 @@ def add_daily_record(user: User, force=False) -> User:
         user.days.append(new_day)
         return user
 
-    # Если запись с этим временем уже есть
+    
     if any(day.date == now_str for day in user.days):
         return user
 
-    # Добавляем как новую запись
+    
     new_day = DayRecord(
         date=now_str,
         money=user.money,
@@ -41,7 +36,7 @@ def add_daily_record(user: User, force=False) -> User:
     return user
 
 
-# stalcraft-users.ru/py/utils.py
+
 def calculate_differences(days: List[DayRecord]) -> List[Dict]:
     differences = []
     for i in range(1, len(days)):
