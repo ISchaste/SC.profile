@@ -16,7 +16,7 @@ body {
     overflow-y: auto;
 }
 
-/* Sidebar справа */
+
 .sidebar {
     width: 140px;
     background-color: #1e1e1e;
@@ -42,15 +42,14 @@ body {
     background-color: #333;
 }
 
-/* Квадрат ресурсов */
-/* Сетка ресурсов */
+
 .resource-list {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-/* Квадрат ресурса */
+
 .resource-item {
     width: 120px;
     height: 120px;
@@ -58,33 +57,33 @@ body {
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* картинка и текст идут сверху вниз */
+    justify-content: flex-start; 
     align-items: center;
     text-align: center;
 }
 
-/* Блок картинки */
+
 .resource-image {
     position: relative;
     display: flex;
-    justify-content: center; /* горизонтально по центру */
-    align-items: center;     /* вертикально по центру */
+    justify-content: center; 
+    align-items: center;    
     width: 100%;
     height: 70px;
 }
 
-/* Иконка ресурса */
+
 .resource-icon {
     max-width: 64px;
     max-height: 64px;
-    object-fit: contain; /* аккуратная подгонка изображения */
+    object-fit: contain; 
 }
 
-/* Счётчик ресурсов */
+
 .image-count {
     position: absolute;
     top: 5px;
-    right: 6px; /* максимально вправо */
+    right: 6px; 
     font-size: 14px;
     font-weight: bold;
     color: #fff;
@@ -93,7 +92,7 @@ body {
     border-radius: 4px;
 }
 
-/* Название ресурса */
+
 .resource-name {
     margin-top: 5px;
     font-size: 13px;
@@ -134,7 +133,7 @@ body {
     border-radius: 4px;
 }
 
-/* Общие данные */
+
 .general-data-container {
     display: flex;
     justify-content: center; /* центрируем всё */
