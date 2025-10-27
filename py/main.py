@@ -1,4 +1,3 @@
-# stalcraft-users.ru/py/main.py
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
@@ -11,15 +10,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 app = FastAPI()
 
-# Статика и шаблоны
+
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
-# Роуты
+
 app.include_router(auth.router)
 app.include_router(menu.router)
 
-# WebSocket без токена
+
 app.websocket("/ws")(websocket.websocket_endpoint)
 
 @app.get("/")
