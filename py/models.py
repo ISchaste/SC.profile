@@ -1,4 +1,3 @@
-# stalcraft-users.ru/py/models.py
 from pydantic import BaseModel, EmailStr
 from typing import Dict, List
 
